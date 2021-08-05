@@ -4,10 +4,10 @@
 
 <br />
 <!-- (click)="subscribe0()" -->
-<button #button>Click Me</button>`
-<h3>Just showing receiving data and experimenting with different kinds of observables, subjects, and rxjs operators</h3>
+<button #button> Click Me </button> <p>Click me to show that my event will not be registered if inner observable is not finished</p>`
+<h4>Just showing receiving data and experimenting with different kinds of observables, subjects, and rxjs operators</h4>
 <button class="btn btn-primary"  disabled>Subscribe to inputChange</button>
-<button class="btn btn-primary" (click)="reset()" >Reset Observable</button>
+<button class="btn btn-primary btn-sm" (click)="resetToInitialState()" >Reset State</button>
 
 <div class="container">
   <form>
@@ -15,17 +15,33 @@
       <label for="oib">Simple observable:</label>
       <input #searchValue type="text" name="oib" [(ngModel)]="oibone" (input)="oibChanged(searchValue.value)" />
     </div>
+    
+    <h2>Biraj RxJS operator i gledaj magiju u konzoli</h2>
+    <div class="btn-toolbar">
+      <button type="button" class="btn btn-primary" (click)='switchOperator("ex")'>ExhaustMap</button>
+      <button type="button" class="btn btn-primary" (click)='switchOperator("co")'>Concat Map</button>
+      <button type="button" class="btn btn-primary" (click)='switchOperator("me")'>Merge Map</button>
+      <button type="button" class="btn btn-primary" (click)='switchOperator("sw")'>Switch Map</button>
+    </div>
     <div>
-      <label for="tip">{{this.rxjsOpString}} INPUT CHANGE: </label>
+      <label for="tip"><b>{{this.rxjsOpString}}</b> INPUT CHANGE: </label>
       <input #inputTipProizvoda type="text" name="tip" [(ngModel)]="tipProizvoda"  />
     </div>
+    <button class="btn btn-primary" (click)="resetToInitialState()" >Reset State</button>
   </form>
 </div>
+<br /><br />
+
+
+<br />
+<h5>todo: choose between type of subjects : current BehavourSubject</h5>
+<h1>Subscription 0</h1>
+<button class="btn btn-primary" (click)="subscribe0()">Subscribe to Observable</button>
+<button class="btn btn-primary" (click)="resetToInitialState()" >Reset State</button>
 <br /><br />
 <ul>
   <li *ngFor="let dataItem of subscription0Data">{{ dataItem }}</li>
 </ul>
-
 
 <br />
 <h1>Subscription 1</h1>

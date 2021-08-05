@@ -38,12 +38,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     //want to listen for subject0 change
-    //this.subscribe0();
+    this.subscribe0();
 
     //src i inner
     //this.subscribeSrcInner();
     
-    //clicks na klik
+    //na klikove button
     this.clicks$ = fromEvent(this.button.nativeElement, 'click');
     this.subscribeExhaustMapClickExample();
 
@@ -57,7 +57,32 @@ export class AppComponent implements OnInit, OnDestroy {
     this.changesTipProiz$ = fromEvent(this.inputTipProizvodaField.nativeElement, 'input');
     this.subscribeVariousRxjsOperatorsOnInputExample();
   }
-  reset() {
+  switchOperator(operSelected: string) {
+    
+    this.resetToInitialState();
+    switch (operSelected) {
+      case "ex":
+        this.rxjsOp = RxjsOperators.exhaustMap;
+        break;
+      case "co":
+        this.rxjsOp = RxjsOperators.concatMap;
+        break;
+      case "me":
+        this.rxjsOp = RxjsOperators.mergeMap;
+        break;
+      case "sw":
+        this.rxjsOp = RxjsOperators.switchMap;
+        break;
+      default:
+        break;
+    }
+    this.TryDifferentOperatorsOnInputChange();
+  }
+  resetToInitialState() {
+    this.count = 0;
+    this.tipProizvoda = "";
+    this.oibone = "";
+    this.subjectsService.resetObs();
     if(this.sub0 !== undefined)
       this.sub0.unsubscribe();
     if(this.sub1 !== undefined)
@@ -70,6 +95,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription1Data = [];
     this.subscription2Data = [];
     this.subscription3Data = [];
+
+    console.clear();
   }
   oibChanged(newOib : string) {
     if(this.sub0.closed) {
@@ -80,7 +107,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   JobInOperator(data) {
     //: typoesafety 'InputEvent' from npm install --save @types/dom-inputevent
-    //sad necu nista delayat ali prvo da radi pa onda to
     this.count+=1;
     console.log("count je : ", this.count);
     let currinputValueField = data.srcElement.value;
@@ -158,20 +184,11 @@ export class AppComponent implements OnInit, OnDestroy {
     //   }
     // });
     let obs = this.subjectsService.observable$.pipe(
-      take(1),
-      exhaustMap(data => {
+      tap(data => {
         if(data) {
           this.subscription0Data.push(data);
         }
-        return this.subjectsService.observable$;
-      }),
-      debounceTime(2000),
-      distinctUntilChanged()
-      // tap(data => {
-      //   if(data) {
-      //     this.subscription0Data.push(data);
-      //   }
-      // })
+      })
     );
     this.sub0 = obs.subscribe();  
   }
