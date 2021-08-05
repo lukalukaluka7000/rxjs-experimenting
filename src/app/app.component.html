@@ -1,0 +1,53 @@
+<h1>
+  RxJS Subjects
+</h1>
+
+<br />
+<!-- (click)="subscribe0()" -->
+<button #button>Click Me</button>`
+<h3>Just showing receiving data and experimenting with different kinds of observables, subjects, and rxjs operators</h3>
+<button class="btn btn-primary"  disabled>Subscribe to inputChange</button>
+<button class="btn btn-primary" (click)="reset()" >Reset Observable</button>
+
+<div class="container">
+  <form>
+    <div>
+      <label for="oib">Simple observable:</label>
+      <input #searchValue type="text" name="oib" [(ngModel)]="oibone" (input)="oibChanged(searchValue.value)" />
+    </div>
+    <div>
+      <label for="tip">{{this.rxjsOpString}} INPUT CHANGE: </label>
+      <input #inputTipProizvoda type="text" name="tip" [(ngModel)]="tipProizvoda"  />
+    </div>
+  </form>
+</div>
+<br /><br />
+<ul>
+  <li *ngFor="let dataItem of subscription0Data">{{ dataItem }}</li>
+</ul>
+
+
+<br />
+<h1>Subscription 1</h1>
+<button class="btn btn-primary" (click)="subscribe1()">Subscribe to Observable</button>
+<br /><br />
+<ul>
+  <li *ngFor="let dataItem of subscription1Data">{{ dataItem }}</li>
+</ul>
+
+<br />
+<h1>Subscription 2</h1>
+<button class="btn btn-primary" (click)="subscribe2()">Subscribe to Observable</button>
+<br /><br />
+<ul>
+  <li *ngFor="let dataItem of subscription2Data">{{ dataItem }}</li>
+</ul>
+
+
+<br />
+<h1>Subscription 3</h1>
+<button class="btn btn-primary" (click)="subscribe3()">Subscribe to Observable</button>
+<br /><br />
+<ul>
+  <li *ngFor="let dataItem of subscription3Data">{{ dataItem }}</li>
+</ul>
