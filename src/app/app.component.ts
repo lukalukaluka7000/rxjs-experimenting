@@ -2,12 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { SubjectsService } from './core/subjects.service';
 import { Subscription, Observable, fromEvent, identity } from 'rxjs';
 import { tap, exhaustMap, debounceTime, distinctUntilChanged, take, concatMap, mergeMap, switchMap } from 'rxjs/operators';
-enum RxjsOperators {
-  exhaustMap,
-  concatMap,
-  mergeMap,
-  switchMap
-}
+import { RxjsOperators, AvailableObservables } from './models/enum-types.model';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,6 +12,9 @@ enum RxjsOperators {
 export class AppComponent implements OnInit, OnDestroy {
   rxjsOp : RxjsOperators = RxjsOperators.switchMap;
   rxjsOpString : string;
+  rxjsObservable : AvailableObservables = AvailableObservables.Subject;
+  rxjsObservableString : string;
+
   oibone : string;
   tipProizvoda:string;
   subscription0Data = [];
@@ -34,11 +33,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @ViewChild('inputTipProizvoda', {static: true}) inputTipProizvodaField;
   changesTipProiz$:Observable<any>;
+
+  observableChosen : boolean = false;
   constructor(private subjectsService: SubjectsService) {}
 
   ngOnInit() {
     //want to listen for subject0 change
-    this.subscribe0();
+    //this.subscribe0(); dodaj subscribe1
 
     //src i inner
     //this.subscribeSrcInner();
@@ -56,6 +57,71 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log("Testing rxjs operator " + this.rxjsOpString  + " na input Change Eventu");
     this.changesTipProiz$ = fromEvent(this.inputTipProizvodaField.nativeElement, 'input');
     this.subscribeVariousRxjsOperatorsOnInputExample();
+  }
+  subscribeVariousRxjsOperatorsOnInputExample() {
+    this.changesTipProiz$.pipe(
+      this.rxjsOp === RxjsOperators.exhaustMap ? exhaustMap(data => this.JobInOperator(data)) : identity,
+      this.rxjsOp === RxjsOperators.concatMap ?  concatMap(data => this.JobInOperator(data)) : identity,
+      this.rxjsOp === RxjsOperators.mergeMap ? mergeMap(data => this.JobInOperator(data)) : identity,
+      this.rxjsOp === RxjsOperators.switchMap ? switchMap(data => this.JobInOperator(data)) : identity,
+    
+    ).subscribe(data => {
+      if(this.rxjsOp === RxjsOperators.exhaustMap || this.rxjsOp === RxjsOperators.concatMap) {
+        console.log("ovde je data nakon sta je inner obs zavrsio sa SVAKIM od svojih timeoutova");
+      }
+      if(this.rxjsOp === RxjsOperators.mergeMap) {
+        console.log("ovde u subscribeu smom, prvo su izvrseni kodovi unutar rxjsOperaotrJob(...) pa onda poslovi u innerObservabelu , brze je, tocno je, ali nema cekanja na odradivanje inner observabla do kraja");
+      }
+      if(this.rxjsOp === RxjsOperators.switchMap) {
+        console.log("switchmapa boli pena, testirat tako da ukucas brzo nesto, i onda sekund nakon opet nesto, moze se vidjeti da on ne ude u ispis data je jer nikad nije ni dokrajcen. Naprotiv, on uzme samo zadnji dospjeli i zavrseni podatak");
+      }
+      //console.log("u subscribe se ulazi onoliko puta koliko je inner Observable nextao (to provjeri po logovima)");
+      console.log("data je: ", data);
+    })
+  }
+  subscribeVariousRxjsObservables() {
+    this.sub0 = this.subjectsService.observable$.subscribe(data => {
+      if(this.rxjsObservable === AvailableObservables.Subject ) {
+        console.log("Subject");
+      }
+      if(this.rxjsObservable === AvailableObservables.BehaviourSubject) {
+        console.log("behaviour");
+      }
+      if(this.rxjsObservable === AvailableObservables.ReplaySubject) {
+        console.log("replay");
+      }
+      if(this.rxjsObservable === AvailableObservables.AsyncSubject) {
+        console.log("async");
+      }
+      console.log("data je: ", data);
+    })
+  }
+  TryDifferentObservables() {
+    this.rxjsObservableString = String(AvailableObservables[ this.rxjsObservable.valueOf() ]).toUpperCase();
+    console.log("Testing observable " + this.rxjsObservableString  + " na svim emitovima");
+
+    this.subjectsService.init(this.rxjsObservable);
+  }
+  switchObs(obsSelected : string) {
+    this.observableChosen = true;
+    this.resetToInitialState();
+    switch (obsSelected) {
+      case "su":
+        this.rxjsObservable = AvailableObservables.Subject;
+        break;
+      case "be":
+        this.rxjsObservable = AvailableObservables.BehaviourSubject;
+        break;
+      case "re":
+        this.rxjsObservable = AvailableObservables.ReplaySubject;
+        break;
+      case "as":
+       this.rxjsObservable = AvailableObservables.AsyncSubject;
+        break;
+      default:
+        break;
+    }
+    this.TryDifferentObservables();
   }
   switchOperator(operSelected: string) {
     
@@ -99,9 +165,9 @@ export class AppComponent implements OnInit, OnDestroy {
     console.clear();
   }
   oibChanged(newOib : string) {
-    if(this.sub0.closed) {
+    //if(this.sub0.closed) {
       this.subscribe0();
-    }
+    //}
     console.log("oib changed: ", newOib);
     this.subjectsService.UpdateOib(newOib);
   }
@@ -114,27 +180,7 @@ export class AppComponent implements OnInit, OnDestroy {
     //npr return this.http.get() : Observable<any>
     return this.delayedObs(currinputValueField);
   }
-  subscribeVariousRxjsOperatorsOnInputExample() {
-    this.changesTipProiz$.pipe(
-      this.rxjsOp === RxjsOperators.exhaustMap ? exhaustMap(data => this.JobInOperator(data)) : identity,
-      this.rxjsOp === RxjsOperators.concatMap ?  concatMap(data => this.JobInOperator(data)) : identity,
-      this.rxjsOp === RxjsOperators.mergeMap ? mergeMap(data => this.JobInOperator(data)) : identity,
-      this.rxjsOp === RxjsOperators.switchMap ? switchMap(data => this.JobInOperator(data)) : identity,
-    
-    ).subscribe(data => {
-      if(this.rxjsOp === RxjsOperators.exhaustMap || this.rxjsOp === RxjsOperators.concatMap) {
-        console.log("ovde je data nakon sta je inner obs zavrsio sa SVAKIM od svojih timeoutova");
-      }
-      if(this.rxjsOp === RxjsOperators.mergeMap) {
-        console.log("ovde u subscribeu smom, prvo su izvrseni kodovi unutar rxjsOperaotrJob(...) pa onda poslovi u innerObservabelu , brze je, tocno je, ali nema cekanja na odradivanje inner observabla do kraja");
-      }
-      if(this.rxjsOp === RxjsOperators.switchMap) {
-        console.log("switchmapa boli pena, testirat tako da ukucas brzo nesto, i onda sekund nakon opet nesto, moze se vidjeti da on ne ude u ispis data je jer nikad nije ni dokrajcen. Naprotiv, on uzme samo zadnji dospjeli i zavrseni podatak");
-      }
-      //console.log("u subscribe se ulazi onoliko puta koliko je inner Observable nextao (to provjeri po logovima)");
-      console.log("data je: ", data);
-    })
-  }
+  
   delayedObs(currInputValueField : string = '') {
     return new Observable((observer) => {
       setTimeout(() => { 
@@ -178,14 +224,10 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
   subscribe0() {
-    // this.sub0 = this.subjectsService.observable$.subscribe(data => {
-    //   if(data) {
-    //     this.subscription0Data.push(data);
-    //   }
-    // });
     let obs = this.subjectsService.observable$.pipe(
       tap(data => {
         if(data) {
+          console.log("usa");
           this.subscription0Data.push(data);
         }
       })
@@ -206,6 +248,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.sub0.unsubscribe();
     this.sub1.unsubscribe();
     this.sub2.unsubscribe();
     this.sub3.unsubscribe();

@@ -4,9 +4,10 @@
 
 <br />
 <!-- (click)="subscribe0()" -->
-<button #button> Click Me </button> <p>Click me to show that my event will not be registered if inner observable is not finished</p>`
+<button #button> Click Me </button> <p>Click me, and than fast again to show that my event will 
+  not be registered if inner observable is not finished</p>
 <h4>Just showing receiving data and experimenting with different kinds of observables, subjects, and rxjs operators</h4>
-<button class="btn btn-primary"  disabled>Subscribe to inputChange</button>
+<button class="btn btn-primary btn-sm"  disabled>Subscribe to inputChange</button>
 <button class="btn btn-primary btn-sm" (click)="resetToInitialState()" >Reset State</button>
 
 <div class="container">
@@ -17,11 +18,11 @@
     </div>
     
     <h2>Biraj RxJS operator i gledaj magiju u konzoli</h2>
-    <div class="btn-toolbar">
-      <button type="button" class="btn btn-primary" (click)='switchOperator("ex")'>ExhaustMap</button>
-      <button type="button" class="btn btn-primary" (click)='switchOperator("co")'>Concat Map</button>
-      <button type="button" class="btn btn-primary" (click)='switchOperator("me")'>Merge Map</button>
-      <button type="button" class="btn btn-primary" (click)='switchOperator("sw")'>Switch Map</button>
+    <div class="btn-toolbar text-center well">
+      <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("ex")'>ExhaustMap</button>
+      <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("co")'>Concat Map</button>
+      <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("me")'>Merge Map</button>
+      <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("sw")'>Switch Map</button>
     </div>
     <div>
       <label for="tip"><b>{{this.rxjsOpString}}</b> INPUT CHANGE: </label>
@@ -34,18 +35,32 @@
 
 
 <br />
-<h5>todo: choose between type of subjects : current BehavourSubject</h5>
+<hr />
+<h2 *ngIf="!observableChosen">Biraj RxJS observable, i klikči subscribe i gledaj magiju vremena u ispisu subscriptiona</h2>
+<div class="btn-toolbar text-center well">
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("su")'>Subject</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("be")'>Behavioral</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("re")'>Replay</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("as")'>Async</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)="resetToInitialState()" >Reset State</button>
+</div>
+<div>
+  <h5>Subject - subscribe na jednog, zatim na drugog, neces dobit prethodno jer je subscribe dosao poslije emita</h5>
+  <h5>Behaviour - subscribe na jednog, zatim na drugog, DOBIT ces prethodnog jer tako funkcionira</h5>
+  <h5>Replay - dobit ces prethodna 2 jer je tako hardkodirano</h5>
+</div>
+<div *ngIf="observableChosen">
+  <h4>Odabran {{this.rxjsObservableString}}</h4>
+</div>
 <h1>Subscription 0</h1>
-<button class="btn btn-primary" (click)="subscribe0()">Subscribe to Observable</button>
-<button class="btn btn-primary" (click)="resetToInitialState()" >Reset State</button>
+<button class="btn btn-primary" [disabled]="!observableChosen" (click)="subscribe0()">Subscribe to Observable0</button>
 <br /><br />
 <ul>
   <li *ngFor="let dataItem of subscription0Data">{{ dataItem }}</li>
 </ul>
-
 <br />
 <h1>Subscription 1</h1>
-<button class="btn btn-primary" (click)="subscribe1()">Subscribe to Observable</button>
+<button class="btn btn-primary" [disabled]="!observableChosen" (click)="subscribe1()">Subscribe to Observable1</button>
 <br /><br />
 <ul>
   <li *ngFor="let dataItem of subscription1Data">{{ dataItem }}</li>
@@ -53,7 +68,7 @@
 
 <br />
 <h1>Subscription 2</h1>
-<button class="btn btn-primary" (click)="subscribe2()">Subscribe to Observable</button>
+<button class="btn btn-primary" [disabled]="!observableChosen" (click)="subscribe2()">Subscribe to Observable2</button>
 <br /><br />
 <ul>
   <li *ngFor="let dataItem of subscription2Data">{{ dataItem }}</li>
@@ -62,7 +77,7 @@
 
 <br />
 <h1>Subscription 3</h1>
-<button class="btn btn-primary" (click)="subscribe3()">Subscribe to Observable</button>
+<button class="btn btn-primary" [disabled]="!observableChosen" (click)="subscribe3()">Subscribe to Observable3</button>
 <br /><br />
 <ul>
   <li *ngFor="let dataItem of subscription3Data">{{ dataItem }}</li>
