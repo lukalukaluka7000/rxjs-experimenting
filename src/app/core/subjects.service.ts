@@ -14,6 +14,9 @@ export class SubjectsService {
   // AsyncSubject Example
   private subjectAsync$: AsyncSubject<string>;
 
+  private simpleSubject$: Subject<string>;
+  simpleObservable$:Observable<string>;
+
   observable$: Observable<string>;
   srcObservable$: Observable<number>;
   innerObservable$ : Observable<string>;
@@ -21,7 +24,10 @@ export class SubjectsService {
 
   constructor() {
   }
-  
+  initSimpleObservable() {
+    this.simpleSubject$ = new Subject<string>();
+    this.simpleObservable$ = this.simpleSubject$.asObservable();
+  }
   init(rxjsObservable : AvailableObservables = AvailableObservables.Subject) {
     this.srcObservable$ = of(1,2,3,4);
     this.innerObservable$=of("a","b","c");
@@ -59,7 +65,7 @@ export class SubjectsService {
 
   }
   UpdateOib(newOib: string) {
-    this.subject$.next(newOib);
+    this.simpleSubject$.next(newOib);
   }
   resetObs() {
     clearInterval(this.refreshIntervalId);

@@ -22,6 +22,8 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription2Data = [];
   subscription3Data = [];
 
+  subSimpleObservable: Subscription;
+  subInputChanges : Subscription;
   sub0: Subscription;
   sub1: Subscription;
   sub2: Subscription;
@@ -35,12 +37,15 @@ export class AppComponent implements OnInit, OnDestroy {
   changesTipProiz$:Observable<any>;
 
   observableChosen : boolean = false;
+  operatorChosen : boolean = false;
   constructor(private subjectsService: SubjectsService) {}
 
   ngOnInit() {
     //want to listen for subject0 change
     //this.subscribe0(); dodaj subscribe1
 
+    this.subjectsService.initSimpleObservable();
+    this.subscribeSimpleObservable();
     //src i inner
     //this.subscribeSrcInner();
     
@@ -49,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscribeExhaustMapClickExample();
 
     //na input field change
-    this.TryDifferentOperatorsOnInputChange();
+    //this.TryDifferentOperatorsOnInputChange();
     
   }
   TryDifferentOperatorsOnInputChange() {
@@ -59,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscribeVariousRxjsOperatorsOnInputExample();
   }
   subscribeVariousRxjsOperatorsOnInputExample() {
-    this.changesTipProiz$.pipe(
+    this.subInputChanges = this.changesTipProiz$.pipe(
       this.rxjsOp === RxjsOperators.exhaustMap ? exhaustMap(data => this.JobInOperator(data)) : identity,
       this.rxjsOp === RxjsOperators.concatMap ?  concatMap(data => this.JobInOperator(data)) : identity,
       this.rxjsOp === RxjsOperators.mergeMap ? mergeMap(data => this.JobInOperator(data)) : identity,
@@ -77,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }
       //console.log("u subscribe se ulazi onoliko puta koliko je inner Observable nextao (to provjeri po logovima)");
       console.log("data je: ", data);
-    })
+    });
   }
   subscribeVariousRxjsObservables() {
     this.sub0 = this.subjectsService.observable$.subscribe(data => {
@@ -123,8 +128,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this.TryDifferentObservables();
   }
-  switchOperator(operSelected: string) {
-    
+  switchOperator(operSelected: string = 'sw') {
+    this.operatorChosen = true;
     this.resetToInitialState();
     switch (operSelected) {
       case "ex":
@@ -157,18 +162,21 @@ export class AppComponent implements OnInit, OnDestroy {
       this.sub2.unsubscribe();
     if(this.sub3 !== undefined)
       this.sub3.unsubscribe();
+    if(this.subSimpleObservable !== undefined)
+      this.subSimpleObservable.unsubscribe();
+    if(this.subInputChanges !== undefined)
+      this.subInputChanges.unsubscribe();
     this.subscription0Data = [];
     this.subscription1Data = [];
     this.subscription2Data = [];
     this.subscription3Data = [];
 
+    this.subjectsService.initSimpleObservable();
+    this.subscribeSimpleObservable();
+
     console.clear();
   }
   oibChanged(newOib : string) {
-    //if(this.sub0.closed) {
-      this.subscribe0();
-    //}
-    console.log("oib changed: ", newOib);
     this.subjectsService.UpdateOib(newOib);
   }
   JobInOperator(data) {
@@ -223,11 +231,13 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log("iz subscribea (length(innerobservable)):", data);
     })
   }
+  subscribeSimpleObservable() {
+    this.subSimpleObservable = this.subjectsService.simpleObservable$.subscribe(data => console.log("Printam from subscribing to simple subject", data)); 
+  }
   subscribe0() {
     let obs = this.subjectsService.observable$.pipe(
       tap(data => {
         if(data) {
-          console.log("usa");
           this.subscription0Data.push(data);
         }
       })
@@ -248,6 +258,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.subSimpleObservable.unsubscribe();
     this.sub0.unsubscribe();
     this.sub1.unsubscribe();
     this.sub2.unsubscribe();

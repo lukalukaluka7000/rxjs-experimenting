@@ -16,19 +16,21 @@
       <label for="oib">Simple observable:</label>
       <input #searchValue type="text" name="oib" [(ngModel)]="oibone" (input)="oibChanged(searchValue.value)" />
     </div>
-    
-    <h2>Biraj RxJS operator i gledaj magiju u konzoli</h2>
+    <br /><br />
+    <h2 *ngIf="!operatorChosen">Biraj RxJS operator i gledaj magiju u konzoli</h2>
     <div class="btn-toolbar text-center well">
       <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("ex")'>ExhaustMap</button>
       <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("co")'>Concat Map</button>
       <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("me")'>Merge Map</button>
       <button type="button" class="btn btn-primary col-xs-2" (click)='switchOperator("sw")'>Switch Map</button>
     </div>
+    <div *ngIf="operatorChosen">
+      <h4>Odabran {{this.rxjsOpString}}</h4>
+    </div>
     <div>
       <label for="tip"><b>{{this.rxjsOpString}}</b> INPUT CHANGE: </label>
-      <input #inputTipProizvoda type="text" name="tip" [(ngModel)]="tipProizvoda"  />
+      <input #inputTipProizvoda type="text" name="tip" [(ngModel)]="tipProizvoda" [disabled]="!operatorChosen" />
     </div>
-    <button class="btn btn-primary" (click)="resetToInitialState()" >Reset State</button>
   </form>
 </div>
 <br /><br />
