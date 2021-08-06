@@ -31,8 +31,7 @@ export class SubjectsService {
   init(rxjsObservable : AvailableObservables = AvailableObservables.Subject) {
     this.srcObservable$ = of(1,2,3,4);
     this.innerObservable$=of("a","b","c");
-    console.log("usa u init");
-    console.log(rxjsObservable);
+
     // Create Subject and Observable Here 
     switch (rxjsObservable) {
       case AvailableObservables.Subject:
