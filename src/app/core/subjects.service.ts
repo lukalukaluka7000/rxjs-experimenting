@@ -18,6 +18,7 @@ export class SubjectsService {
   refreshIntervalId : any;
 
   constructor() {}
+  
   initSimpleObservable() {
     this.simpleSubject$ = new Subject<string>();
     this.simpleObservable$ = this.simpleSubject$.asObservable();

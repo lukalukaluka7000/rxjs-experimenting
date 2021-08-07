@@ -22,7 +22,6 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription2Data = [];
   subscription3Data = [];
 
-  subSimpleObservable: Subscription;
   subInputChanges : Subscription;
   sub0: Subscription;
   sub1: Subscription;
@@ -41,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(public subjectsService: SubjectsService) {}
 
   ngOnInit() {
-    //this.subjectsService.initSimpleObservable();
+    this.subjectsService.initSimpleObservable();
     //src i inner
     //this.subscribeSrcInner();
     
@@ -53,10 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
     //this.TryDifferentOperatorsOnInputChange();
     
   }
-  subscribeSimpleObservable() {
-    this.subSimpleObservable = this.subjectsService.simpleObservable$.subscribe(data => 
-      console.log("Printam from subscribing to simple subject", data)); 
-  }
+
   TryDifferentOperatorsOnInputChange() {
     this.rxjsOpString = String(RxjsOperators[ this.rxjsOp.valueOf() ]).toUpperCase();
     console.log("Testing rxjs operator " + this.rxjsOpString  + " na input Change Eventu");
@@ -147,8 +143,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.sub2.unsubscribe();
     if(this.sub3 !== undefined)
       this.sub3.unsubscribe();
-    if(this.subSimpleObservable !== undefined)
-      this.subSimpleObservable.unsubscribe();
     if(this.subInputChanges !== undefined)
       this.subInputChanges.unsubscribe();
     this.subscription0Data = [];
@@ -240,7 +234,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subSimpleObservable.unsubscribe();
     this.sub0.unsubscribe();
     this.sub1.unsubscribe();
     this.sub2.unsubscribe();
