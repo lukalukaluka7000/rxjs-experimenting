@@ -1,7 +1,7 @@
 # RxjsSubjects
 
 Preview:
-![Alt text]("https://github.com/lukalukaluka7000/rxjs-experimenting/blob/refactoring/src/preview.PNG") 
+![Alt text](https://github.com/lukalukaluka7000/rxjs-experimenting/blob/refactoring/src/preview.PNG) 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
 
