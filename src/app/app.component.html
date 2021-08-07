@@ -46,10 +46,10 @@
 <hr />
 <h2 *ngIf="!observableChosen">Biraj RxJS observable, i klikči subscribe i gledaj magiju vremena u ispisu subscriptiona</h2>
 <div class="btn-toolbar text-center well">
-  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("su")'>Subject</button>
-  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("be")'>Behavioral</button>
-  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("re")'>Replay</button>
-  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs("as")'>Async</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs(0)'>Subject</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs(1)'>Behavioral</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs(2)'>Replay</button>
+  <button type="button" class="btn btn-primary col-xs-2" (click)='switchObs(3)'>Async</button>
   <button type="button" class="btn btn-primary col-xs-2" (click)="resetToInitialState()" >Reset State</button>
 </div>
 <div>

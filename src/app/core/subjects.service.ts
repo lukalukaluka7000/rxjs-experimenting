@@ -11,22 +11,16 @@ export class SubjectsService {
 
   private simpleSubject$: Subject<string>;
   simpleObservable$:Observable<string>;
-
-  srcObservable$: Observable<number>;
-  innerObservable$ : Observable<string>;
   
   refreshIntervalId : any;
-
-  constructor() {}
   
+  constructor() {
+  }
   initSimpleObservable() {
     this.simpleSubject$ = new Subject<string>();
     this.simpleObservable$ = this.simpleSubject$.asObservable();
   }
   init(rxjsObservable : AvailableObservables = AvailableObservables.Subject) {
-    this.srcObservable$ = of(1,2,3,4);
-    this.innerObservable$=of("a","b","c");
-
     // Create Subject and Observable Here 
     switch (rxjsObservable) {
       case AvailableObservables.Subject:

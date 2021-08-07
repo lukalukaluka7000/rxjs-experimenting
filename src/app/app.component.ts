@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subjectsService.initSimpleObservable();
-    //todo: src i inner
+
     this.clicks$ = fromEvent(this.button.nativeElement, 'click');
     this.subscribeExhaustMapClickExample();
   }
@@ -53,10 +53,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.changesTipProiz$ = fromEvent(this.inputTipProizvodaField.nativeElement, 'input');
     this.subscribeVariousRxjsOperatorsOnInputExample();
   }
-  TryDifferentObservables() {
-    this.rxjsObservableString = String(AvailableObservables[ this.rxjsObservable.valueOf() ]).toUpperCase();
+  TryDifferentObservables(obsSelectedValue : number) {
+    this.rxjsObservableString = AvailableObservables[obsSelectedValue];
     console.log("Testing observable " + this.rxjsObservableString  + " na svim emitovima");
-
+  
+    //getting key: observable by ordinal, dont care how it works
+    this.rxjsObservable = Object.keys(AvailableObservables).indexOf(AvailableObservables[obsSelectedValue]) - 
+      (Object.keys(AvailableObservables).length / 2);
+      
     this.subjectsService.init(this.rxjsObservable);
   }
   subscribeVariousRxjsOperatorsOnInputExample() {
@@ -82,26 +86,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   
-  switchObs(obsSelected : string) {
+  switchObs(obsSelectedValue : number) {
     this.resetToInitialState();
     this.observableChosen = true;
-    switch (obsSelected) {
-      case "su":
-        this.rxjsObservable = AvailableObservables.Subject;
-        break;
-      case "be":
-        this.rxjsObservable = AvailableObservables.BehaviourSubject;
-        break;
-      case "re":
-        this.rxjsObservable = AvailableObservables.ReplaySubject;
-        break;
-      case "as":
-       this.rxjsObservable = AvailableObservables.AsyncSubject;
-        break;
-      default:
-        break;
-    }
-    this.TryDifferentObservables();
+    
+    this.TryDifferentObservables(obsSelectedValue);
   }
   switchOperator(operSelected: string = 'sw') {
     this.resetToInitialState();
@@ -187,19 +176,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log("data je: ", data);
     });
   }
-  subscribeSrcInner() {
-    this.subjectsService.srcObservable$.pipe(
-      exhaustMap(val => {
-        console.log("source value" + val);
-        // console.log("starting new obs");
-        console.log("ceka se inner observable prije nego sta se krene dalje");
-        console.log("vracam inner observable i on se u subscribeau manifestira");
-        return this.subjectsService.innerObservable$;
-      })
-    ).subscribe(data => {
-      console.log("iz subscribea (length(innerobservable)):", data);
-    })
-  }
+
 
   subscribe0() {
     this.sub0 = this.subjectsService.observable$.subscribe(data => this.subscription0Data.push(data));
