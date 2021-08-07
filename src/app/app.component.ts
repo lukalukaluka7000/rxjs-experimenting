@@ -38,14 +38,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   observableChosen : boolean = false;
   operatorChosen : boolean = false;
-  constructor(private subjectsService: SubjectsService) {}
+  constructor(public subjectsService: SubjectsService) {}
 
   ngOnInit() {
-    //want to listen for subject0 change
-    //this.subscribe0(); dodaj subscribe1
-
-    this.subjectsService.initSimpleObservable();
-    this.subscribeSimpleObservable();
+    //this.subjectsService.initSimpleObservable();
     //src i inner
     //this.subscribeSrcInner();
     
@@ -57,11 +53,21 @@ export class AppComponent implements OnInit, OnDestroy {
     //this.TryDifferentOperatorsOnInputChange();
     
   }
+  subscribeSimpleObservable() {
+    this.subSimpleObservable = this.subjectsService.simpleObservable$.subscribe(data => 
+      console.log("Printam from subscribing to simple subject", data)); 
+  }
   TryDifferentOperatorsOnInputChange() {
     this.rxjsOpString = String(RxjsOperators[ this.rxjsOp.valueOf() ]).toUpperCase();
     console.log("Testing rxjs operator " + this.rxjsOpString  + " na input Change Eventu");
     this.changesTipProiz$ = fromEvent(this.inputTipProizvodaField.nativeElement, 'input');
     this.subscribeVariousRxjsOperatorsOnInputExample();
+  }
+  TryDifferentObservables() {
+    this.rxjsObservableString = String(AvailableObservables[ this.rxjsObservable.valueOf() ]).toUpperCase();
+    console.log("Testing observable " + this.rxjsObservableString  + " na svim emitovima");
+
+    this.subjectsService.init(this.rxjsObservable);
   }
   subscribeVariousRxjsOperatorsOnInputExample() {
     this.subInputChanges = this.changesTipProiz$.pipe(
@@ -84,29 +90,8 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log("data je: ", data);
     });
   }
-  subscribeVariousRxjsObservables() {
-    this.sub0 = this.subjectsService.observable$.subscribe(data => {
-      if(this.rxjsObservable === AvailableObservables.Subject ) {
-        console.log("Subject");
-      }
-      if(this.rxjsObservable === AvailableObservables.BehaviourSubject) {
-        console.log("behaviour");
-      }
-      if(this.rxjsObservable === AvailableObservables.ReplaySubject) {
-        console.log("replay");
-      }
-      if(this.rxjsObservable === AvailableObservables.AsyncSubject) {
-        console.log("async");
-      }
-      console.log("data je: ", data);
-    })
-  }
-  TryDifferentObservables() {
-    this.rxjsObservableString = String(AvailableObservables[ this.rxjsObservable.valueOf() ]).toUpperCase();
-    console.log("Testing observable " + this.rxjsObservableString  + " na svim emitovima");
 
-    this.subjectsService.init(this.rxjsObservable);
-  }
+  
   switchObs(obsSelected : string) {
     this.observableChosen = true;
     this.resetToInitialState();
@@ -172,7 +157,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription3Data = [];
 
     this.subjectsService.initSimpleObservable();
-    this.subscribeSimpleObservable();
 
     console.clear();
   }
@@ -231,9 +215,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log("iz subscribea (length(innerobservable)):", data);
     })
   }
-  subscribeSimpleObservable() {
-    this.subSimpleObservable = this.subjectsService.simpleObservable$.subscribe(data => console.log("Printam from subscribing to simple subject", data)); 
-  }
+
   subscribe0() {
     let obs = this.subjectsService.observable$.pipe(
       tap(data => {

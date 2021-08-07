@@ -7,23 +7,17 @@ import { AvailableObservables } from '../models/enum-types.model';
 })
 export class SubjectsService {  
   private subject$ : Subject<string>;
-  // BehaviorSubject Example
-  private subjectBehavioral$ : BehaviorSubject<string>;
-  // ReplaySubject Example
-  private subjectReplay$: ReplaySubject<string>;
-  // AsyncSubject Example
-  private subjectAsync$: AsyncSubject<string>;
+  observable$: Observable<string>;
 
   private simpleSubject$: Subject<string>;
   simpleObservable$:Observable<string>;
 
-  observable$: Observable<string>;
   srcObservable$: Observable<number>;
   innerObservable$ : Observable<string>;
+  
   refreshIntervalId : any;
 
-  constructor() {
-  }
+  constructor() {}
   initSimpleObservable() {
     this.simpleSubject$ = new Subject<string>();
     this.simpleObservable$ = this.simpleSubject$.asObservable();

@@ -16,6 +16,9 @@
       <label for="oib">Simple observable:</label>
       <input #searchValue type="text" name="oib" [(ngModel)]="oibone" (input)="oibChanged(searchValue.value)" />
     </div>
+    <div>
+      Printam from subscribing to simple subject: {{ this.subjectsService.simpleObservable$ | async }}
+    </div>
     <br /><br />
     <h2 *ngIf="!operatorChosen">Biraj RxJS operator i gledaj magiju u konzoli</h2>
     <div class="btn-toolbar text-center well">
