@@ -3,9 +3,12 @@
 </h1>
 
 <br />
-<!-- (click)="subscribe0()" -->
 <button #button> Click Me </button> <p>Click me, and than fast again to show that my event will 
-  not be registered if inner observable is not finished</p>
+  not be registered if inner observable is not finished (exhaustMap)</p>
+<div>
+  Data se manifestira nakon sta je inner obs zavrsio sa SVAKIM od svojih timeoutova, a
+  u subscribe se ulazi onoliko puta koliko je inner Observable nextao. Gledat u konzoli zbog timelinea 
+</div>
 <h4>Just showing receiving data and experimenting with different kinds of observables, subjects, and rxjs operators</h4>
 <button class="btn btn-primary btn-sm"  disabled>Subscribe to inputChange</button>
 <button class="btn btn-primary btn-sm" (click)="resetToInitialState()" >Reset State</button>

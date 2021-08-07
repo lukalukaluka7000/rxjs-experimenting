@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription2Data = [];
   subscription3Data = [];
 
+  subClicks: Subscription;
   subInputChanges : Subscription;
   sub0: Subscription;
   sub1: Subscription;
@@ -29,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sub3: Subscription;
 
   @ViewChild('button',{static:true}) button; //moze bit i 'input' event
-  clicks$:Observable<any>;
+  clicks$ : Observable<any>;
   count : number=0;
 
   @ViewChild('inputTipProizvoda', {static: true}) inputTipProizvodaField;
@@ -41,16 +42,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subjectsService.initSimpleObservable();
-    //src i inner
-    //this.subscribeSrcInner();
-    
-    //na klikove button
+    //todo: src i inner
     this.clicks$ = fromEvent(this.button.nativeElement, 'click');
     this.subscribeExhaustMapClickExample();
-
-    //na input field change
-    //this.TryDifferentOperatorsOnInputChange();
-    
   }
 
   TryDifferentOperatorsOnInputChange() {
@@ -145,6 +139,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.sub3.unsubscribe();
     if(this.subInputChanges !== undefined)
       this.subInputChanges.unsubscribe();
+    if(this.subClicks !== undefined)
+      this.subClicks.unsubscribe();
     this.subscription0Data = [];
     this.subscription1Data = [];
     this.subscription2Data = [];
@@ -177,23 +173,18 @@ export class AppComponent implements OnInit, OnDestroy {
         observer.next(this.count + " B: " + currInputValueField);
         observer.complete();
       }, 2000);
-      // moras imat complete da bi se znalo da je zavrsio;
-      
     });
   }
   subscribeExhaustMapClickExample() {
-    this.clicks$.pipe(
-      exhaustMap(() => {// on ne primi nista jer je button click event glup sam po sebi
-        console.log("botun je kliknut, idemo u delyed Observable i ceka se da se on izvrsi koliko god trajao i tek onda prihvacam naknadne klikove");
+    this.subClicks = this.clicks$.pipe(
+      exhaustMap(() => {
+        console.log("printam iz exhaustMapa samo za jedan klik, idem u delayed inner Observable i ceka se da se on izvrsi koliko god trajao i tek onda prihvacam naknadne klikove");
         this.count += 1;
         console.log("count je : ", this.count);
         return this.delayedObs();
       }) 
     ).subscribe(data => {
-      console.log("ovde je data nakon sta je inner obs zavrsio sa SVAKIM od svojih timeoutova");
-      console.log("u subscribe se ulazi onoliko puta koliko je inner Observable nextao (to provjeri po logovima)");
-      console.log("data je: ");
-      console.log(data);
+      console.log("data je: ", data);
     });
   }
   subscribeSrcInner() {
@@ -238,6 +229,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sub1.unsubscribe();
     this.sub2.unsubscribe();
     this.sub3.unsubscribe();
+    this.subClicks.unsubscribe();
   }
 
 }
