@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.clicks$ = fromEvent(this.button.nativeElement, 'click');
     this.subscribeExhaustMapClickExample();
   }
-
+  //pozivan
   TryDifferentOperatorsOnInputChange() {
     this.rxjsOpString = String(RxjsOperators[ this.rxjsOp.valueOf() ]).toUpperCase();
     console.log("Testing rxjs operator " + this.rxjsOpString  + " na input Change Eventu");
@@ -83,8 +83,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   
   switchObs(obsSelected : string) {
-    this.observableChosen = true;
     this.resetToInitialState();
+    this.observableChosen = true;
     switch (obsSelected) {
       case "su":
         this.rxjsObservable = AvailableObservables.Subject;
@@ -104,8 +104,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.TryDifferentObservables();
   }
   switchOperator(operSelected: string = 'sw') {
-    this.operatorChosen = true;
     this.resetToInitialState();
+    this.operatorChosen = true;
     switch (operSelected) {
       case "ex":
         this.rxjsOp = RxjsOperators.exhaustMap;
@@ -139,15 +139,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.sub3.unsubscribe();
     if(this.subInputChanges !== undefined)
       this.subInputChanges.unsubscribe();
-    if(this.subClicks !== undefined)
-      this.subClicks.unsubscribe();
+
     this.subscription0Data = [];
     this.subscription1Data = [];
     this.subscription2Data = [];
     this.subscription3Data = [];
 
     this.subjectsService.initSimpleObservable();
-
+    this.operatorChosen = false;
+    this.observableChosen = false;
     console.clear();
   }
   oibChanged(newOib : string) {
@@ -202,14 +202,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   subscribe0() {
-    let obs = this.subjectsService.observable$.pipe(
-      tap(data => {
-        if(data) {
-          this.subscription0Data.push(data);
-        }
-      })
-    );
-    this.sub0 = obs.subscribe();  
+    this.sub0 = this.subjectsService.observable$.subscribe(data => this.subscription0Data.push(data));
   }
 
   subscribe1() {
@@ -230,6 +223,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sub2.unsubscribe();
     this.sub3.unsubscribe();
     this.subClicks.unsubscribe();
+    this.subInputChanges.unsubscribe();
   }
 
 }
