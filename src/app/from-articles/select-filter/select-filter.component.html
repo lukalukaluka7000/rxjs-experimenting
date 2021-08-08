@@ -1,0 +1,18 @@
+
+<div>Using RxJS to reduce the state of our components</div>
+<div>
+    selectedUserId
+    <select [(ngModel)]="selectedUserId" (ngModelChange)="changeUser()">
+        <option>Select a User</option>
+        <option *ngFor="let user of users" [value]="user.id"> {{ user.name }} </option>
+    </select>
+    <select [(ngModel)]="blackListedUsers" (ngModelChange)="changeUser()" multiple>
+        <option *ngFor="let user of users" [value]="user.id"> {{ user.name }} </option>
+    </select>
+    Allow black listed users 
+        <input type="checkbox" [(ngModel)]="allowBlackListedUsers"/>
+
+    <button [disabled]="isUserBlackListed && !allowBlackListedUsers">Submit</button>
+</div>
+  
+  

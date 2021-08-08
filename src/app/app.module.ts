@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { SelectFilterComponent } from './from-articles/select-filter/select-filter.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SelectFilterComponent
   ],
   imports: [
     BrowserModule,

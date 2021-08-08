@@ -10,6 +10,7 @@ import { RxjsOperators, AvailableObservables } from './models/enum-types.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
   rxjsOp : RxjsOperators = RxjsOperators.switchMap;
   rxjsOpString : string;
   rxjsObservable : AvailableObservables = AvailableObservables.Subject;
