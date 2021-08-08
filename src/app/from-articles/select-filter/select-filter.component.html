@@ -4,17 +4,18 @@
 </div>
 <div>
     selectedUserId
-    <select [(ngModel)]="selectedUserId" (ngModelChange)="changeUser()">
+    <select [formControl]="selectUserId">
         <option>Select a User</option>
         <option *ngFor="let user of users" [value]="user.id"> {{ user.name }} </option>
     </select>
-    <select [(ngModel)]="blackListedUsers" (ngModelChange)="changeUser()" multiple>
+    blacklisted list
+    <select [formControl]="blackListedUsers" multiple>
         <option *ngFor="let user of users" [value]="user.id"> {{ user.name }} </option>
     </select>
     Allow black listed users 
-        <input type="checkbox" [(ngModel)]="allowBlackListedUsers"/>
+        <input type="checkbox" [formControl]="blackAllowed" />
 
-    <button [disabled]="isUserBlackListed && !allowBlackListedUsers">Submit</button>
+    <button [disabled]="isDisabled$ | async ">Submit</button>
 </div>
   
   
