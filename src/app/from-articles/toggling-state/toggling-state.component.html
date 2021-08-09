@@ -1,5 +1,5 @@
 <div class="container">
-    <button (click)="showSearchInput($event)">Search</button>
-    <input [(ngModel)]="query" *ngIf="isSearchInputVisible"/>
+    <button #btn>Search</button>
+    <input [formControl]="tekst" *ngIf="isSearchInputVisible$ | async"/>
 </div>
 <hr />
