@@ -1,0 +1,5 @@
+<div class="container">
+    <button (click)="showSearchInput($event)">Search</button>
+    <input [(ngModel)]="query" *ngIf="isSearchInputVisible"/>
+</div>
+<hr />
