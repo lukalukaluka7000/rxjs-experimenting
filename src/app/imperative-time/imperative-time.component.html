@@ -1,9 +1,9 @@
 <div>
-<select [(ngModel)]="format">
+<select [formControl]="format">
     <option value="24h">24 Hour</option>
     <option value="ampm">AM PM</option>
   </select>
 
-  {{ formattedTime }}
+  {{ formattedTime$ | async }}
 </div>
 <hr />
