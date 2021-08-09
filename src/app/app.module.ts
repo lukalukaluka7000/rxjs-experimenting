@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectFilterComponent } from './from-articles/select-filter/select-filter.component';
 import { TogglingStateComponent } from './from-articles/toggling-state/toggling-state.component';
+import { ImperativeTimeComponent } from './imperative-time/imperative-time.component';
 @NgModule({
   declarations: [
     AppComponent,
     SelectFilterComponent,
-    TogglingStateComponent
+    TogglingStateComponent,
+    ImperativeTimeComponent
   ],
   imports: [
     BrowserModule,
